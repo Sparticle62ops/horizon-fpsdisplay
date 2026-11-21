@@ -1,0 +1,64 @@
+name: swap-release-asset
+
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/swap-asset.yml']
+
+permissions:
+  contents: write
+
+jobs:
+  swap:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fetch and verify upstream LICENSE
+        run: |
+          set -e
+          curl -fsSL https://raw.githubusercontent.com/Grayray75/FPS-Display/main/LICENSE.txt -o LICENSE
+          GOT=$(sha256sum LICENSE | cut -d' ' -f1)
+          if [ "$GOT" != "a5681bf9b05db14d86776930017c647ad9e6e56ff6bbcfdf21e5848288dfaf1b" ]; then
+            echo "LICENSE sha mismatch: $GOT"
+            exit 1
+          fi
+
+      - name: Package and verify the .hmod
+        run: |
+          set -e
+          python3 - <<'PY'
+          import zipfile
+          members = ['Cargo.toml','LICENSE','README.md','horizon-mod.toml','assets/fpsdisplay/lang/en_us.json','src/lib.rs','src/state.rs']
+          with zipfile.ZipFile('fpsdisplay-5.2.0.hmod','w') as z:
+              for m in members:
+                  zi = zipfile.ZipInfo(m, date_time=(2026,11,21,0,0,0))
+                  zi.compress_type = zipfile.ZIP_DEFLATED
+                  zi.external_attr = 0o644 << 16
+                  z.writestr(zi, open(m,'rb').read())
+          PY
+          GOT=$(sha256sum fpsdisplay-5.2.0.hmod | cut -d' ' -f1)
+          echo "package sha256: $GOT"
+          if [ "$GOT" != "d6edc5860f8741d526b707dacdf3dfaa5b4dee22fe9ccafd5c795966f97c0c10" ]; then
+            echo "package sha mismatch"
+            exit 1
+          fi
+
+      - name: Replace release assets
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -e
+          gh release upload v5.2.0 fpsdisplay-5.2.0.hmod --clobber
+          gh release delete-asset v5.2.0 fpsdisplay-5.2.0.hnmod --yes
+          gh release delete-asset v5.2.0 fpsdisplaymod-5.2.0.hmod --yes
+
+      - name: Remove this workflow
+        run: |
+          set -e
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git rm .github/workflows/swap-asset.yml
+          git add LICENSE
+          git commit -m "Add LGPL-3.0 LICENSE from upstream; remove temporary release-asset workflow; package drops the generated Cargo.lock (cargo regenerates it)"
+          git push origin HEAD:main
