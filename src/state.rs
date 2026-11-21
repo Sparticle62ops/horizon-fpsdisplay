@@ -169,3 +169,35 @@ pub fn sample_frame() -> i32 {
     }
     fps
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn history_caps_at_the_original_limit() {
+        let mut h = FpsHistory::default();
+        for i in 0..600 {
+            h.add(i);
+        }
+        assert_eq!(h.len(), LIMIT);
+        assert_eq!(h.get_minimum(), 600 - LIMIT as i32);
+        assert_eq!(h.get_maximum(), 599);
+    }
+
+    #[test]
+    fn averages_are_the_original_integer_mean() {
+        let mut h = FpsHistory::default();
+        for i in 1..=5 {
+            h.add(i);
+        }
+        assert_eq!(h.get_average(), 3);
+    }
+
+    #[test]
+    fn key_mode_round_trips() {
+        assert_eq!(KeyMode::from_index(0), KeyMode::Toggle);
+        assert_eq!(KeyMode::from_index(1), KeyMode::PushToShow);
+        assert_eq!(KeyMode::PushToShow.index(), 1);
+    }
+}
