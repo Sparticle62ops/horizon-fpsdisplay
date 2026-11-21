@@ -39,7 +39,7 @@ jobs:
           PY
           GOT=$(sha256sum fpsdisplay-5.2.0.hmod | cut -d' ' -f1)
           echo "package sha256: $GOT"
-          if [ "$GOT" != "d6edc5860f8741d526b707dacdf3dfaa5b4dee22fe9ccafd5c795966f97c0c10" ]; then
+          if [ "$GOT" != "006bd3a05456c81826532c985036f3ff39333b5d7ce8df875248a7ca7fa1f90a" ]; then
             echo "package sha mismatch"
             exit 1
           fi
