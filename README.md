@@ -1,6 +1,7 @@
 # fpsdisplay (Horizon native mod)
 
-A 1:1 Rust port of [fpsdisplaymod](https://modrinth.com/mod/fpsdisplay) (MIT):
+A 1:1 Rust port of [FPS-Display](https://github.com/Grayray75/FPS-Display)
+v5.2.0, LGPL-3.0-only, (c) Grayray75:
 an FPS readout that shows the current frames per second, and with advanced
 stats the minimum, average and maximum of the last seven seconds, at your
 chosen corner, size, colour and alpha. The package is the `.hmod` source: a
@@ -43,5 +44,5 @@ upgrades the port back to full parity when patched.
 
 ## License
 
-Upstream fpsdisplaymod: MIT. This port carries the same license; see
-LICENSE.
+Upstream FPS-Display: LGPL-3.0-only, (c) Grayray75. This 1:1 port carries
+the same license; see LICENSE.

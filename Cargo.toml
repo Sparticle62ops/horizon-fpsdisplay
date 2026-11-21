@@ -2,10 +2,9 @@
 name = "mod-fpsdisplay"
 version = "5.2.0"
 edition = "2024"
-license = "MIT"
+license = "LGPL-3.0-only"
 publish = false
-description = "FPS Display, a native mod: an FPS readout."
+description = "FPS Display, a native mod: an FPS readout. 1:1 port of Grayray75/FPS-Display (LGPL-3.0-only)."
 
 [dependencies]
 horizon-mod-api = { path = ".horizon/sdk/api/crates/horizon-mod-api" }
-
