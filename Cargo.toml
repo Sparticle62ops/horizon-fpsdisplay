@@ -8,4 +8,3 @@ description = "FPS Display, a native mod: an FPS readout. 1:1 port of Grayray75/
 
 [dependencies]
 horizon-mod-api = { path = ".horizon/sdk/api/crates/horizon-mod-api" }
-
