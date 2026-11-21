@@ -1,5 +1,5 @@
 //! FPS Display for Horizon: the FPS readout's state (a 1:1 port of
-//! fpsdisplaymod's FpsHistory and ConfigData, MIT).
+//! Grayray75/FPS-Display's FpsHistory and ConfigData, LGPL-3.0-only).
 //!
 //! The samples come from the frame interval the draw hook measures between
 //! two of its own calls: the API exposes no client fps read, and this
